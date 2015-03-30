@@ -1,0 +1,75 @@
+{% extends 'main.twig' %}
+{% block content %}
+    <form action="" method="post">
+        <div class='row' style="margin-top: 15%">
+            <div class="offset-by-three one-half column">
+
+                <label for="urlInput">Enter URL:</label>
+                <input class="u-full-width" id="urlInput" name="url" type="text" placeholder="http://www.site.com"
+                       required="required">
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="offset-by-three three columns">
+                <label for="parseLevelSelect">Parse lavel</label>
+                <select name="parseLevel" id="parseLevelSelect" class="u-full-width">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="three columns">
+                <label for="changeFreqSelect">Change frequency</label>
+                <select name="changeFreq" id="changeFreqSelect" class="u-full-width">
+                    <option value="" selected="">None</option>
+                    <option value="always">Always</option>
+                    <option value="hourly">Hourly</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                    <option value="never">Never</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-by-three three columns">
+                <label for="lastModSelect">Last modification</label>
+                <select name="lastMod" id="lastModSelect" class="u-full-width">
+                    <option value>None</option>
+                    <option value="response" selected>Try to use server's response</option>
+                    <option value="current">Current time</option>
+                </select>
+            </div>
+            <div class="three columns">
+                <label for="prioritySelect">Priority</label>
+                <select name="priority" id="prioritySelect" class="u-full-width">
+                    <option value>None</option>
+                    <option value="auto" selected>Automatically calculated</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-by-three three columns">
+                <label>
+                    <input type="checkbox" name="gzip">
+                    <span class="label-body">GZip sitemap.xml</span>
+                </label>
+            </div>
+
+        </div>
+        <div class='row'>
+            <div class="offset-by-three one-half column">
+
+                <input type="submit" class="button-primary u-pull-right" value="Generate">
+
+            </div>
+
+        </div>
+    </form>
+{% endblock %}

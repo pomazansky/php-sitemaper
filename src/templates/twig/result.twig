@@ -1,0 +1,29 @@
+{% extends 'main.twig' %}
+{% block content %}
+    <div class="row" style="margin-top: 15%">
+        <div class="offset-by-two eight column">
+            <h3>Your Sitemap for</h3>
+
+            <h2>{{ baseUrl }}</h2>
+
+            <h3>was successfully generated</h3>
+            <h4>{{ linksCount }} valid links found</h4>
+        </div>
+    </div>
+    {% if sitemapIndexFile %}
+        <div class="row">
+            <div class="offset-by-three one-half column">
+                Sitemap Index: <a href="/download/{{ sitemapIndexFile }}">sitemapIndexFile</a>
+            </div>
+        </div>
+
+    {% endif %}
+    {% for sitemap in sitemapFiles %}
+        <div class="row">
+            <div class="offset-by-three one-half column">
+                Sitemap: <a href="download/{{ sitemap }}">{{ sitemap }}</a>
+            </div>
+        </div>
+
+    {% endfor %}
+{% endblock %}
