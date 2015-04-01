@@ -8,7 +8,7 @@ namespace PhpSitemaper\Exporters;
  * Interface ISitemapExporter
  * @package Sitemap\Exporters
  */
-interface ISitemapExporter
+interface ExporterInterface
 {
     /**
      * Sets export file path

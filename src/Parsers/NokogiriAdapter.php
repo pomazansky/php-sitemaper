@@ -10,7 +10,7 @@ use nokogiri;
  * Class ParserNokogiri
  * @package Sitemap\Parsers
  */
-class NokogiriAdapter implements IParser
+class NokogiriAdapter implements ParserInterface
 {
 
     /**

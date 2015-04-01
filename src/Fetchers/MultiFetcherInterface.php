@@ -10,7 +10,7 @@ use GuzzleHttp\Event\CompleteEvent;
  * Interface IFetcher
  * @package Sitemap\Fetchers
  */
-interface IMultiFetcher
+interface MultiFetcherInterface
 {
     /**
      * Sets base URL

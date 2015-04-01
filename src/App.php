@@ -69,6 +69,6 @@ class App
             time() . ' ' . $e->getFile() . ' @ line : ' . $e->getLine() . ' thrown ' . $e->getMessage() . "\n",
             FILE_APPEND);
         $view = new View();
-        $view->renderError($msg = $e->getMessage());
+        $view->renderError($e->getMessage());
     }
 }

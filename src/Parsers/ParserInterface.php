@@ -8,7 +8,7 @@ namespace PhpSitemaper\Parsers;
  * Interface IParser
  * @package Sitemap\Parsers
  */
-interface IParser
+interface ParserInterface
 {
 
     /**
@@ -24,5 +24,4 @@ interface IParser
      * @return array
      */
     public function parse();
-
 }

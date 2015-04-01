@@ -112,7 +112,6 @@ class Router
             $view = new View();
             header('HTTP/1.0 404 Not Found');
             $view->render404();
-            exit;
         }
     }
 

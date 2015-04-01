@@ -8,7 +8,7 @@ namespace PhpSitemaper\Exporters;
  * Class ExporterXmlWriter
  * @package Sitemap\Exporters
  */
-class XmlWriterAdapter implements ISitemapExporter
+class XmlWriterAdapter implements ExporterInterface
 {
     /**
      * Base URL
@@ -16,13 +16,6 @@ class XmlWriterAdapter implements ISitemapExporter
      * @var string
      */
     private $baseUrl;
-
-    /**
-     * Export file path
-     *
-     * @var string
-     */
-    private $filename;
 
     /**
      * XMLWriter object
@@ -46,7 +39,6 @@ class XmlWriterAdapter implements ISitemapExporter
      */
     public function setFilename($filename)
     {
-        $this->filename = $filename;
         $this->writer->openURI($filename);
     }
 

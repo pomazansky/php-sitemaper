@@ -2,8 +2,6 @@
 
 namespace PhpSitemaper;
 
-//error_reporting(E_ALL);
-
 /**
  * Composer Autoload
  */

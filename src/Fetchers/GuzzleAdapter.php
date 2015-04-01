@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Event\CompleteEvent;
 use GuzzleHttp\Pool;
 
-class GuzzleAdapter implements IMultiFetcher
+class GuzzleAdapter implements MultiFetcherInterface
 {
 
     /**

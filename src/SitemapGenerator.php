@@ -2,9 +2,9 @@
 
 namespace PhpSitemaper;
 
-use PhpSitemaper\Exporters\ISitemapExporter;
-use PhpSitemaper\Fetchers\IMultiFetcher;
-use PhpSitemaper\Parsers\IParser;
+use PhpSitemaper\Exporters\ExporterInterface;
+use PhpSitemaper\Fetchers\MultiFetcherInterface;
+use PhpSitemaper\Parsers\ParserInterface;
 
 /**
  * Class SitemapGenerator
@@ -57,21 +57,21 @@ class SitemapGenerator
     /**
      * Object of HTTP client
      *
-     * @var IMultiFetcher
+     * @var MultiFetcherInterface
      */
     private $fetcher;
 
     /**
      * HTML parser object
      *
-     * @var IParser
+     * @var ParserInterface
      */
     private $parser;
 
     /**
      * XML exporter object
      *
-     * @var ISitemapExporter
+     * @var ExporterInterface
      */
     private $exporter;
 
@@ -110,9 +110,9 @@ class SitemapGenerator
     /**
      * Sets HTTP client object
      *
-     * @param IMultiFetcher $fetcher
+     * @param MultiFetcherInterface $fetcher
      */
-    public function setFetcher(IMultiFetcher $fetcher)
+    public function setFetcher(MultiFetcherInterface $fetcher)
     {
         $this->fetcher = $fetcher;
     }
@@ -120,9 +120,9 @@ class SitemapGenerator
     /**
      * Sets HTML parser object
      *
-     * @param IParser $parser
+     * @param ParserInterface $parser
      */
-    public function setParser(IParser $parser)
+    public function setParser(ParserInterface $parser)
     {
         $this->parser = $parser;
     }
@@ -130,9 +130,9 @@ class SitemapGenerator
     /**
      * Sets XML parser object
      *
-     * @param ISitemapExporter $exporter
+     * @param ExporterInterface $exporter
      */
-    public function setExporter(ISitemapExporter $exporter)
+    public function setExporter(ExporterInterface $exporter)
     {
         $this->exporter = $exporter;
     }

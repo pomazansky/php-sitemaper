@@ -81,5 +81,4 @@ class SitemapCommand extends Command
          */
         $sitemap->execute();
     }
-
 }
