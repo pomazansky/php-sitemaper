@@ -11,10 +11,10 @@
   ],
   "require": {
     "php": ">=5.5.0",
-    "ext-curl": "*",
     "twig/twig": "~1.0",
     "olamedia/nokogiri": "dev-master",
-    "symfony/console": "3.0.*@dev"
+    "symfony/console": "3.0.*@dev",
+    "guzzlehttp/guzzle": "5.0.*@dev"
   },
   "autoload": {
     "psr-4": {"PhpSitemaper\\": "src/"}

@@ -3,7 +3,7 @@
 namespace PhpSitemaper\Controllers;
 
 use PhpSitemaper\Exporters\ExporterXmlWriter;
-use PhpSitemaper\Fetchers\FetcherCurl;
+use PhpSitemaper\Fetchers\FetcherGuzzle;
 use PhpSitemaper\Parsers\ParserNokogiri;
 use PhpSitemaper\SitemapConfig;
 use PhpSitemaper\SitemapGenerator;
@@ -48,7 +48,7 @@ class SitemapController
         /**
          * Устанавливаем fetcher - модуль загрузки файлов по HTTP(S)
          */
-        $sitemap->setFetcher(new FetcherCurl());
+        $sitemap->setFetcher(new FetcherGuzzle());
 
         /**
          * Пакет парсинга Nokogiri выбран на основании сравнительного тестирования подобных
