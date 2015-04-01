@@ -34,7 +34,7 @@ class SitemapView extends View
             'template_path' => 'src/templates/',
             'title' => 'Sitemap Generator',
             'baseUrl' => $sitemap->getBaseUrl(),
-            'linksCount' => $sitemap->getPagesCount(),
+            'linksCount' => $sitemap->getResourcesCount(),
             'sitemapFiles' => $sitemap->getSitemapFiles(),
             'sitemapIndexFile' => $sitemap->getSitemapIndexFile()
         ]);

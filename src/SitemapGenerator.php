@@ -43,9 +43,9 @@ class SitemapGenerator
     /**
      * Array of enlisted pages
      *
-     * @var Page[]
+     * @var Resource[]
      */
-    private $pages = [];
+    private $resources = [];
 
     /**
      * Array of pages to fetch
@@ -143,22 +143,22 @@ class SitemapGenerator
      * @param string $url
      * @param array $headers
      */
-    public function touchPage($url, $headers)
+    public function touchResource($url, $headers)
     {
-        $page = new Page($url, $this->config, $this->i);
-        $page->setHeaders($headers);
+        $resource = new Resource($url, $this->config, $this->i);
+        $resource->setHeaders($headers);
 
         $this->stats->oneScanned($this->i);
 
-        if (!$page->isValidContent()) {
+        if (!$resource->isValidContent()) {
             return;
         }
 
-        $this->pages[$page->getUrl()] = $page;
+        $this->resources[$resource->getUrl()] = $resource;
 
         $this->stats->oneAdded($this->i);
 
-        if ($this->i < $this->config->parseLevel && $page->isHtml()) {
+        if ($this->i < $this->config->parseLevel && $resource->isHtml()) {
             $this->addToGetQueue($url);
         }
     }
@@ -169,7 +169,7 @@ class SitemapGenerator
      * @param string $url
      * @param string $html
      */
-    public function parsePage($url, $html)
+    public function parseResource($url, $html)
     {
         $this->parser->setHtml($html);
 
@@ -276,7 +276,7 @@ class SitemapGenerator
      */
     public function addToHeadQueue($url)
     {
-        if (!array_key_exists($url, $this->pages) && !in_array($url, $this->fetchQueue['head'][$this->i + 1],
+        if (!array_key_exists($url, $this->resources) && !in_array($url, $this->fetchQueue['head'][$this->i + 1],
                 true)
         ) {
             $this->fetchQueue['head'][$this->i + 1][] = $url;
@@ -320,8 +320,8 @@ class SitemapGenerator
             $this->stats->newLevel($this->i);
             $this->stats->inQueue($this->i, count($this->fetchQueue['head'][$this->i]));
 
-            $this->fetcher->headPool($this->fetchQueue['head'][$this->i], [$this, 'touchPage']);
-            $this->fetcher->getPool($this->fetchQueue['get'][$this->i], [$this, 'parsePage']);
+            $this->fetcher->headPool($this->fetchQueue['head'][$this->i], [$this, 'touchResource']);
+            $this->fetcher->getPool($this->fetchQueue['get'][$this->i], [$this, 'parseResource']);
 
             if (count($this->fetchQueue['head'][$this->i + 1]) === 0) {
                 break;
@@ -383,10 +383,10 @@ class SitemapGenerator
         $this->exporter->setFilename('download/' . $this->sitemapFiles[0]);
         $this->exporter->startDocument();
 
-        foreach ($this->pages as $page) {
+        foreach ($this->resources as $resource) {
 
-            $this->exporter->attachUrl($page->getUrl(), $page->getLastMod(), $page->getChangeFreq(),
-                $page->getPriority());
+            $this->exporter->attachUrl($resource->getUrl(), $resource->getLastMod(), $resource->getChangeFreq(),
+                $resource->getPriority());
 
             $writtenUrls++;
             if ($writtenUrls === 50000 || filesize('download/' . $this->sitemapFiles[$currentFileIndex]) > 10484000) {
@@ -459,9 +459,9 @@ class SitemapGenerator
      *
      * @return int
      */
-    public function getPagesCount()
+    public function getResourcesCount()
     {
-        return count($this->pages);
+        return count($this->resources);
     }
 
     /**
