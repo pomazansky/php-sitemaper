@@ -5,14 +5,14 @@ namespace PhpSitemaper;
 //error_reporting(E_ALL);
 
 /**
- * Подгрузка автозагрузчика Composer
+ * Composer Autoload
  */
 require_once 'vendor/autoload.php';
 
 App::start();
 
 /**
- * Инициализация Роутера и определение маршрутов
+ * Initializing router and defining routes
  */
 $router = Router::getInstance();
 
@@ -21,6 +21,6 @@ $router->add('post', '/',['sitemap','generate']);
 
 
 /**
- * Запуск роутера
+ * Router execution
  */
 $router->execute();

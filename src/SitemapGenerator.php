@@ -7,8 +7,6 @@ use PhpSitemaper\Fetchers\IMultiFetcher;
 use PhpSitemaper\Parsers\IParser;
 
 /**
- * Класс генератора src
- *
  * Class SitemapGenerator
  * @package src
  */
@@ -16,84 +14,83 @@ class SitemapGenerator
 {
 
     /**
-     * Название файла src Index
+     * Sitemap Index file path
      *
      * @var string|null
      */
     private $sitemapIndexFile;
 
     /**
-     * Список названий сгенерированных файлов src
+     * Array of Sitemap files
      *
      * @var array
      */
     private $sitemapFiles = [];
     /**
-     * Параметр конфигурации
+     * Sitemap generation config object
      *
      * @var SitemapConfig
      */
     private $config;
 
     /**
-     * Базовый адрес
+     * Base URL
      *
      * @var array
      */
     private $baseUrl;
 
     /**
-     * Массив страниц
+     * Array of enlisted pages
      *
      * @var Page[]
      */
     private $pages = [];
 
     /**
-     * Массив очереди загрузки.
-     * Уровни вложенности реализуются за счет подмасивов
+     * Array of pages to fetch
      *
      * @var array
      */
     private $fetchQueue;
 
     /**
-     * Объект загрузчика страниц
+     * Object of HTTP client
      *
      * @var IMultiFetcher
      */
     private $fetcher;
 
     /**
-     * Объект парсера страниц
+     * HTML parser object
      *
      * @var IParser
      */
     private $parser;
 
     /**
-     * Объект экспортера src в XML
+     * XML exporter object
      *
      * @var ISitemapExporter
      */
     private $exporter;
 
     /**
-     * Счетчик уровня вложенности
+     * Nesting level counter
      *
      * @var int
      */
     private $i;
 
     /**
-     * Стастистика
+     * Statistic gethering object
      *
      * @var Stat
      */
     private $stats;
 
     /**
-     * Инициализация конфигурации "по умолчанию"
+     * Initialized default config
      */
     public function __construct()
     {
@@ -101,7 +98,7 @@ class SitemapGenerator
     }
 
     /**
-     * Установка конфигурации
+     * Sets config
      *
      * @param SitemapConfig $config
      */
@@ -111,7 +108,7 @@ class SitemapGenerator
     }
 
     /**
-     * Установка загрузчика страниц
+     * Sets HTTP client object
      *
      * @param IMultiFetcher $fetcher
      */
@@ -121,7 +118,7 @@ class SitemapGenerator
     }
 
     /**
-     * Установка парсера страниц
+     * Sets HTML parser object
      *
      * @param IParser $parser
      */
@@ -131,7 +128,7 @@ class SitemapGenerator
     }
 
     /**
-     * Установка экспортера XML
+     * Sets XML parser object
      *
      * @param ISitemapExporter $exporter
      */
@@ -141,8 +138,8 @@ class SitemapGenerator
     }
 
     /**
-     * Проверка доступности страницы, принятие решения о добавлении в общий список ссылок
-     * на основании проверки MIME-типа и, если полученный контенкт HTML - отправка на парсинг ссылок
+     * Callback for first touching (retrieving only server response headers)
+     *
      * @param string $url
      * @param array $headers
      */
@@ -167,7 +164,8 @@ class SitemapGenerator
     }
 
     /**
-     * Парсинг страницы и добавление найденых ссылок
+     * Page parsing and adding retrieved URLs to queue
+     *
      * @param string $url
      * @param string $html
      */
@@ -184,7 +182,7 @@ class SitemapGenerator
     }
 
     /**
-     * Фильтрация найденных ссылок в соответствии со спецификацией src
+     * Filters founded links due to Sitemap specs
      *
      * @param array $parsedLinks
      * @param string $currentUrl
@@ -228,7 +226,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод приводит относительный путь ссылки к абсолютному
+     * Transforms relative URL to absolute
      *
      * @param string $pathStr
      * @param string $basePathStr
@@ -262,7 +260,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод возвращает базовый адрес в виде массива элементов
+     * Return base URL as array of elements
      *
      * @return array
      */
@@ -302,7 +300,7 @@ class SitemapGenerator
     }
 
     /**
-     * Реализации алгоритма обхода страниц сайта
+     * Sitemap generation execution
      */
     public function execute()
     {
@@ -335,7 +333,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод возвращает базовый адрес в виде строки
+     * Return base URL as string
      *
      * @return string
      */
@@ -350,7 +348,7 @@ class SitemapGenerator
     }
 
     /**
-     * Установка базового адреса
+     * Sets base URL
      *
      * @param string $url
      */
@@ -373,8 +371,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод реализует экспорт полученного списка ссылок в формат src.xml, при необходимости
-     * формирует несколько файлов и src Index
+     * Exports URLs to XML files
      */
     private function export()
     {
@@ -436,7 +433,7 @@ class SitemapGenerator
     }
 
     /**
-     * Генерация имени файла Sitemap
+     * Generates Sitemap filename
      *
      * @param string $mode
      * @return string
@@ -447,7 +444,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод сжимает указанный файл алгоритмом gzip и удаляет исходный файл
+     * Gzips file and deletes source
      *
      * @param string $sourceFile
      */
@@ -458,7 +455,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод возвращает количество найденых ссылок
+     * Returns enlisted URLs count
      *
      * @return int
      */
@@ -468,7 +465,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод возвращает список имен файлов Sitemap
+     * Returns Sitemap files list
      *
      * @return array
      */
@@ -478,7 +475,7 @@ class SitemapGenerator
     }
 
     /**
-     * Метод возвращает имя файла Sitemap Index
+     * Return Sitemap Index filename
      *
      * @return null|string
      */
@@ -488,7 +485,7 @@ class SitemapGenerator
     }
 
     /**
-     * Установка объекта сбора статистики
+     * Sets statistic gethering object
      *
      * @param Stat $stats
      */
@@ -498,7 +495,7 @@ class SitemapGenerator
     }
 
     /**
-     * Генерация идентификатора процесса генерации Sitemap
+     * Generates process id
      *
      * @return string
      */

@@ -2,9 +2,9 @@
 
 namespace PhpSitemaper;
 
-use PhpSitemaper\Exporters\ExporterXmlWriter;
+use PhpSitemaper\Exporters\XmlWriterAdapter;
 use PhpSitemaper\Fetchers\GuzzleAdapter;
-use PhpSitemaper\Parsers\ParserNokogiri;
+use PhpSitemaper\Parsers\NokogiriAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Класс комманды для консольного приложения
+ * Console App Command Class
  *
  * Class SitemapCommand
  * @package Sitemap
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SitemapCommand extends Command
 {
     /**
-     * Метод устанавливате аргументы и флаги для консольной коммнады
+     * Sets input arguments and options
      */
     protected function configure()
     {
@@ -45,7 +45,7 @@ class SitemapCommand extends Command
     }
 
     /**
-     * Метод выполнения консольной комманды
+     * Console command execution
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -62,21 +62,22 @@ class SitemapCommand extends Command
         $sitemap->setFetcher(new GuzzleAdapter());
 
         /**
-         * Пакет парсинга Nokogiri выбран на основании сравнительного тестирования подобных
-         * решений для PHP на сайте Habrahabr.ru
+         * Sets HTML parser
          */
-        $sitemap->setParser(new ParserNokogiri());
+        $sitemap->setParser(new NokogiriAdapter());
 
         /**
-         * Экспорт в XML осуществляется с помощью XMLWriter, что показал лучшую производительность
-         * по сравнению с DOM
+         * Sets Sitemap XML exporter
          */
-        $sitemap->setExporter(new ExporterXmlWriter());
+        $sitemap->setExporter(new XmlWriterAdapter());
 
+        /**
+         * Sets stats object
+         */
         $sitemap->setStats(new Stat($id));
 
         /**
-         * Запуск генерации Sitemap
+         * Sitemap generation
          */
         $sitemap->execute();
     }

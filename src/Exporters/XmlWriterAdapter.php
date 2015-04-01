@@ -3,36 +3,36 @@
 namespace PhpSitemaper\Exporters;
 
 /**
- * Класс экспорта src в XML формат с помощью XMLWriter
+ * Sitemap XML exporter with XMLWriter
  *
  * Class ExporterXmlWriter
  * @package Sitemap\Exporters
  */
-class ExporterXmlWriter implements ISitemapExporter
+class XmlWriterAdapter implements ISitemapExporter
 {
     /**
-     * Базовый URL
+     * Base URL
      *
      * @var string
      */
     private $baseUrl;
 
     /**
-     * Путь к файлу для экспорта
+     * Export file path
      *
      * @var string
      */
     private $filename;
 
     /**
-     * Объект XMLWriter
+     * XMLWriter object
      *
      * @var \XMLWriter
      */
     private $writer;
 
     /**
-     * Инициализация XML-документа
+     * Initializes XML document
      */
     public function __construct()
     {
@@ -40,7 +40,7 @@ class ExporterXmlWriter implements ISitemapExporter
     }
 
     /**
-     * Метод устанавливает путь к файлу для экспорта
+     * Sets export file path
      *
      * @param string $filename
      */
@@ -51,7 +51,7 @@ class ExporterXmlWriter implements ISitemapExporter
     }
 
     /**
-     * Установка параметров и инициализация документа
+     * Sets params and initializes document
      *
      * @param string $mode
      */
@@ -70,7 +70,7 @@ class ExporterXmlWriter implements ISitemapExporter
         }
 
         /**
-         * Добавление ссылки на XSD-схему для валидации итогового файла на соответствие спецификации
+         * Add XSD scheme link for validation
          */
         $this->writer->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
@@ -81,7 +81,7 @@ class ExporterXmlWriter implements ISitemapExporter
     }
 
     /**
-     * Метод устанавливает базовый адрес для последующего добавления страниц
+     * Sets base URL
      *
      * @param string $baseUrl
      */
@@ -91,7 +91,7 @@ class ExporterXmlWriter implements ISitemapExporter
     }
 
     /**
-     * Метод добавляет в XML-документ адрес страницы и опциональные параметры
+     * Adds URL with optional params to XML document
      *
      * @param string $loc
      * @param null|string $lastMod
@@ -120,7 +120,7 @@ class ExporterXmlWriter implements ISitemapExporter
     }
 
     /**
-     * Метод добавляет в src Index адрес src
+     * Adds Sitemap file URL to Sitemap Index
      *
      * @param $loc
      * @param string $lastMod
@@ -137,7 +137,7 @@ class ExporterXmlWriter implements ISitemapExporter
     }
 
     /**
-     * Метод сохраняет XML-документ в указанный файл
+     * Saves XML to file
      */
     public function save()
     {

@@ -56,6 +56,12 @@ class GuzzleAdapter implements IMultiFetcher
         $this->baseUrl = $baseUrl;
     }
 
+    /**
+     * Does multiple HTTP HEAD requests
+     *
+     * @param array $urls
+     * @param callable $complete
+     */
     public function headPool(array $urls, callable $complete)
     {
         $this->onHeadComplete = $complete;
@@ -72,6 +78,11 @@ class GuzzleAdapter implements IMultiFetcher
 
     }
 
+    /**
+     * Callback method for HTTP HEAD request success
+     *
+     * @param CompleteEvent $event
+     */
     public function onHeadComplete(CompleteEvent $event)
     {
         $url = parse_url($event->getRequest()->getUrl());
@@ -85,6 +96,12 @@ class GuzzleAdapter implements IMultiFetcher
         call_user_func_array($this->onHeadComplete, [$url['path'] . $query, $headers]);
     }
 
+    /**
+     * Does multiple HTTP GET requests
+     *
+     * @param array $urls
+     * @param callable $complete
+     */
     public function getPool(array $urls, callable $complete)
     {
         $this->onGetComplete = $complete;
@@ -100,6 +117,11 @@ class GuzzleAdapter implements IMultiFetcher
         ]);
     }
 
+    /**
+     * Callback for HTTP GET request success
+     *
+     * @param CompleteEvent $event
+     */
     public function onGetComplete(CompleteEvent $event)
     {
         $url = parse_url($event->getRequest()->getUrl());

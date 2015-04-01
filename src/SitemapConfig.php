@@ -3,7 +3,7 @@
 namespace PhpSitemaper;
 
 /**
- * Класс параметров генерации Sitemap
+ * Sitemap generation config
  *
  * Class SitemapConfig
  * @package Sitemap
@@ -11,33 +11,33 @@ namespace PhpSitemaper;
 class SitemapConfig
 {
     /**
-     * Глубина парсинга страниц
+     * Nesting level
      * @var integer
      */
     public $parseLevel = 3;
     /**
-     * Частота изменения страницы
+     * Change frequency mode
      * @var null|string
      */
     public $changeFreq;
     /**
-     * Метод установки параметра lastmod страницы
+     * Last modified mode
      * @var string
      */
     public $lastMod = 'response';
     /**
-     * Метод установки приоритета страницы
+     * Priority mode
      * @var string
      */
     public $priority = 'auto';
     /**
-     * Сжимать ли результирующий файл
+     * GZip mode
      * @var bool
      */
     public $gzip = false;
 
     /**
-     * Метод проверет и устанавливает парамеры при создании
+     * Checks and sets params on creation
      *
      * @param array $params
      */
@@ -65,7 +65,7 @@ class SitemapConfig
     }
 
     /**
-     * Установка уровня парсинга
+     * Sets nesting level
      *
      * @param $parseLevel
      */
@@ -75,7 +75,7 @@ class SitemapConfig
     }
 
     /**
-     * Вспомогательный метод проверки параметров
+     * Supports params checking
      *
      * @param $value
      * @param array $validValues
@@ -87,7 +87,7 @@ class SitemapConfig
     }
 
     /**
-     * Установка режима частоты изменения
+     * Sets change frequency mode
      *
      * @param $changeFreq
      */
@@ -99,7 +99,7 @@ class SitemapConfig
     }
 
     /**
-     * Установка режима определения времени поледнего изменения
+     * Sets last modification mode
      *
      * @param $lastMod
      */
@@ -109,7 +109,7 @@ class SitemapConfig
     }
 
     /**
-     * Установка режима определения относительного приоритета страницы
+     * Sets priority mode
      *
      * @param $priority
      */
@@ -119,7 +119,7 @@ class SitemapConfig
     }
 
     /**
-     * Установка режима архивирование результирующих файлов
+     * Sets GZip mode
      *
      * @param $gzip
      */

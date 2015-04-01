@@ -3,7 +3,7 @@
 namespace PhpSitemaper;
 
 /**
- * Класс сбора статистики
+ * Statistic gethering class
  *
  * Class Stat
  * @package Sitemap
@@ -11,35 +11,35 @@ namespace PhpSitemaper;
 class Stat
 {
     /**
-     * Идентификатор процесса
+     * Process id
      *
      * @var string
      */
     private $id;
 
     /**
-     * Статичтика по уровням вложености
+     * Nesting levels stat
      *
      * @var array
      */
     private $levels = [];
 
     /**
-     * Время начала паринга
+     * Parsing start time
      *
      * @var float
      */
     private $started;
 
     /**
-     * Время окончания парсинга
+     * Parsing finish time
      *
      * @var float
      */
     private $ended;
 
     /**
-     * Установка идентификатора процесса при создании
+     * Sets process id on creation
      *
      * @param string $id
      */
@@ -49,7 +49,7 @@ class Stat
     }
 
     /**
-     * Установка времени начала парсинга
+     * Sets parsing start time
      */
     public function setStart()
     {
@@ -57,7 +57,7 @@ class Stat
     }
 
     /**
-     * Создание нового уровня парсинга
+     * Sets new nesting level
      *
      * @param int $level
      */
@@ -67,7 +67,7 @@ class Stat
     }
 
     /**
-     * Увеличение счетчика просканированых страниц
+     * Pings scanned counter
      *
      * @param int $level
      */
@@ -77,7 +77,7 @@ class Stat
     }
 
     /**
-     * Увеличение счетчика додавленных страниц
+     * Pings added counter
      *
      * @param int $level
      */
@@ -88,7 +88,7 @@ class Stat
     }
 
     /**
-     * Сохраниние данных в файл
+     * Saves data to file
      */
     private function saveToFile()
     {
@@ -100,7 +100,7 @@ class Stat
     }
 
     /**
-     * Установка количества ссылок в очереди для конкретного уровня парсинга
+     * Sets quantity of links in queue on nesting level
      *
      * @param int $level
      * @param int $num
@@ -111,12 +111,11 @@ class Stat
     }
 
     /**
-     * Установка времени окончания парсинга
+     * Sets parse finish time
      */
     public function setEnd()
     {
         $this->ended = microtime(true);
         $this->saveToFile();
     }
-
 }

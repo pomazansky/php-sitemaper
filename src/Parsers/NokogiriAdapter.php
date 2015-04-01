@@ -5,23 +5,23 @@ namespace PhpSitemaper\Parsers;
 use nokogiri;
 
 /**
- * Класс парсинга HTML на основании библиотеки Nokogiri
+ * Adapter class for Nokogiri HTML parsing library
  *
  * Class ParserNokogiri
  * @package Sitemap\Parsers
  */
-class ParserNokogiri implements IParser
+class NokogiriAdapter implements IParser
 {
 
     /**
-     * HTML-код для парсинга
+     * HTML for parsing
      *
      * @var string
      */
     private $html;
 
     /**
-     * Метод устанавливает HTML-код для парсинга
+     * Sets HTML for parsing
      *
      * @param string $html
      */
@@ -31,7 +31,7 @@ class ParserNokogiri implements IParser
     }
 
     /**
-     * Метод осуществляет парсинг и возвращает массив найденных ссылок
+     * Returns parsed from HTML URLs
      *
      * @return array
      */

@@ -5,43 +5,41 @@ namespace PhpSitemaper;
 use PhpSitemaper\Views\View;
 
 /**
- * Класс Роутинга на основании шаблона Singleton
- *
  * Class Router
  * @package Sitemap
  */
 class Router
 {
     /**
-     * Статический параметр объекта Роутера
+     * Static instance
      *
      * @var Router
      */
     private static $instance;
 
     /**
-     * Массив маршрутов
+     * Array of routes
      *
      * @var array
      */
     private $routes = [];
 
     /**
-     * Параметр текущего адресса по отношению к базовому
-     *
-     * @var string
-     */
-    private $currentUri;
-
-    /**
-     * Метод запрещает создавать объекты класса извне в соответствии с паттерном Singleton
+     * Defines constructor as protected
      */
     protected function __construct()
     {
     }
 
     /**
-     * Метод возвращает единственный экземпляр класса
+     * Makes object coping impossble
+     */
+    protected function __clone()
+    {
+    }
+
+    /**
+     * Return self static instance
      *
      * @return Router
      */
@@ -54,12 +52,9 @@ class Router
         return self::$instance;
     }
 
-    public function getCurrentUri()
-    {
-        return $this->currentUri;
-    }
-
     /**
+     * Returns array of routes
+     *
      * @return array
      */
     public function getRoutes()
@@ -68,7 +63,7 @@ class Router
     }
 
     /**
-     * Добавление маршрута
+     * Adds a route
      *
      * @param string $method
      * @param string $uri
@@ -94,7 +89,7 @@ class Router
     }
 
     /**
-     * Метод производит маршрутизации на основании текущего адреса
+     * Executes router
      */
     public function execute()
     {
@@ -122,7 +117,7 @@ class Router
     }
 
     /**
-     * Вспомогательный метод определения адреса
+     * Return current request URI
      *
      * @return string
      */
@@ -133,15 +128,7 @@ class Router
         $request = array_diff($request, ['']);
 
         $uri = '/' . implode('/', $request);
-        $this->currentUri = $uri;
 
         return $uri;
-    }
-
-    /**
-     * Метод запрещает копировать объекты класса извне в соответствии с паттерном Singleton
-     */
-    protected function __clone()
-    {
     }
 }

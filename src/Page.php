@@ -3,65 +3,62 @@
 namespace PhpSitemaper;
 
 /**
- * Класс страницы
- *
  * Class Page
  * @package Sitemap
  */
 class Page
 {
     /**
-     * Относительны адрес страницы
+     * Relative page address
      *
      * @var string
      */
     protected $url;
 
     /**
-     * Параметр времени последней модификации страницы в формате W3C
+     * Last modification time in W3C format
      *
      * @var string
      */
     protected $lastMod;
 
     /**
-     * Параметр регулярности изменения страницы
+     * Page change frequency
      *
      * @var string
      */
     protected $changeFreq;
 
     /**
-     * Параметр относительно приоритета страницы
+     * Relative page priority
      *
      * @var float
      */
     protected $priority;
 
     /**
-     * Заголовки ответа веб-сервера
+     * Response headers
      *
      * @var array
      */
     protected $headers = [];
 
     /**
-     * Объект конфигурации
+     * Sitemap configuration object
      *
      * @var SitemapConfig
      */
     protected $config;
 
     /**
-     * Уровень ссылочной вложености страницы по отношению к главной.
-     * Используется для автоматического расчета параметра priority
+     * Nesting level of a page
      *
      * @var integer
      */
     protected $level;
 
     /**
-     * Установка базовых параметров
+     * Sets base params
      *
      * @param $url
      * @param null|SitemapConfig $config
@@ -87,7 +84,7 @@ class Page
     }
 
     /**
-     * Метод возвращает относительный URL страницы
+     * Return relative URL
      *
      * @return string
      */
@@ -97,7 +94,7 @@ class Page
     }
 
     /**
-     * Метод устанавливает относительный URL страницы
+     * Sets relative URL
      *
      * @param string $url
      */
@@ -107,7 +104,7 @@ class Page
     }
 
     /**
-     * Метод возвращает время последней модификации страницы
+     * Return last modification time
      *
      * @return string
      */
@@ -117,7 +114,7 @@ class Page
     }
 
     /**
-     * Метод установки времени последней модификации страницы
+     * Sets last modification time
      */
     public function setLastMod()
     {
@@ -134,10 +131,7 @@ class Page
     }
 
     /**
-     * Метод определяет на основании заголовков является ли полученый
-     * ответ подходящего типа для включения в src.
-     * Список валидных типов сформирован на оновании списка типов файлов,
-     * которые индексирует Google
+     * Determines if the link content is worth including in Sitemap using response headers
      * https://support.google.com/webmasters/answer/35287?hl=en
      */
     public function isValidContent()
@@ -169,7 +163,7 @@ class Page
     }
 
     /**
-     * Метод возвращает значение определенного заголовка ответа веб-сервера
+     * Returns response header
      *
      * @param string $hName
      * @return bool|string
@@ -187,8 +181,7 @@ class Page
     }
 
     /**
-     * Метод определяет на основании заголовков является ли полученый
-     * ответ от веб-сервера страницей HTML
+     * Determines if response is HTML
      *
      * @return bool
      */
@@ -198,7 +191,7 @@ class Page
     }
 
     /**
-     * Метод возвращает частоту изменения страницы
+     * Return change frequency
      *
      * @return string
      */
@@ -208,7 +201,7 @@ class Page
     }
 
     /**
-     * Метод устанавливает частоту изменения страницы
+     * Sets change frequency
      *
      * @param string $changeFreq
      */
@@ -218,7 +211,7 @@ class Page
     }
 
     /**
-     * Метод возвращает относительный приоритет страницы
+     * Return relative priority
      *
      * @return float
      */
@@ -228,7 +221,7 @@ class Page
     }
 
     /**
-     * Метод устанавливает относительный приоритет страницы
+     * Sets relative priority
      *
      * @param float $priority
      */
@@ -238,7 +231,7 @@ class Page
     }
 
     /**
-     * Метод возвращает заголовки ответа веб-сервера при загрузке страницы
+     * Returns response headers
      *
      * @return array
      */
@@ -248,7 +241,7 @@ class Page
     }
 
     /**
-     * Метод устанавливает заголовки ответа веб-сервера
+     * Sets response headers
      *
      * @param array $headers
      */
@@ -260,8 +253,7 @@ class Page
     }
 
     /**
-     * Метод определения последней модификации страницы на основании заголовков
-     * ответа веб-сервера
+     * Analyses response headers for last modified time
      */
     protected function parseHeadersForLastModified()
     {

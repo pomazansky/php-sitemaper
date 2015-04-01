@@ -2,24 +2,31 @@
 <?php
 
 /**
- * Снятие ограничения на время выполнение
+ * Setting infinite execution time
  */
 set_time_limit(0);
 
 /**
- * Подргрузка автозагрузчика Composer
+ * Composer Autoload
  */
 require_once __DIR__ . '/vendor/autoload.php';
 
 /**
- * Используем компонент Symfony Console
+ * Using Symfony Console
  */
 use Symfony\Component\Console\Application;
 
 /**
- * Создаем экземляр класс Application, подключаем класс команды
- * и запускаем приложение
+ * Creating new object of Application class
  */
 $app = new Application('Sitemap Generator');
+
+/**
+ * Adding new command to application
+ */
 $app->add(new \PhpSitemaper\SitemapCommand());
+
+/**
+ * Running
+ */
 $app->run();

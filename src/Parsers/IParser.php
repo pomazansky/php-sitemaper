@@ -3,7 +3,7 @@
 namespace PhpSitemaper\Parsers;
 
 /**
- * Интерфейс парсинга HTML-кода
+ * HTML parse interface
  *
  * Interface IParser
  * @package Sitemap\Parsers
@@ -12,14 +12,14 @@ interface IParser
 {
 
     /**
-     * Метод задает HTML-код для дальнейшего парсинга
+     * Sets HTML for parsing
      *
      * @param string $html
      */
     public function setHtml($html = '');
 
     /**
-     * Метод осуществляет парсинг и возвращает массив URL-адресов
+     * Returns parsed from HTML URLs
      *
      * @return array
      */

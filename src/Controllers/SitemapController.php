@@ -2,24 +2,22 @@
 
 namespace PhpSitemaper\Controllers;
 
-use PhpSitemaper\Exporters\ExporterXmlWriter;
+use PhpSitemaper\Exporters\XmlWriterAdapter;
 use PhpSitemaper\Fetchers\GuzzleAdapter;
-use PhpSitemaper\Parsers\ParserNokogiri;
+use PhpSitemaper\Parsers\NokogiriAdapter;
 use PhpSitemaper\SitemapConfig;
 use PhpSitemaper\SitemapGenerator;
 use PhpSitemaper\Stat;
 use PhpSitemaper\Views\SitemapView;
 
 /**
- * Класс Контроллера
- *
  * Class SitemapController
  * @package Sitemap\Controllers
  */
 class SitemapController
 {
     /**
-     * Действие "по умолчанию". Создает Вид для отображения главной формы
+     * Default action. Creates View for rendering main form
      */
     public function indexAction()
     {
@@ -28,52 +26,50 @@ class SitemapController
     }
 
     /**
-     * Действие генерации Sitemap
+     * Sitemap generation action
      */
     public function generateAction()
     {
         /**
-         * Генерируем id для процесса генерации и прописывамем в сессию
+         * Generates process id
          */
         $id = SitemapGenerator::genId();
         $_SESSION['id'] = $id;
 
         /**
-         * Создание объекта генерации src и установка базовых параметров
+         * Creates sitemap object and sets basic params
          */
         $sitemap = new SitemapGenerator();
         $sitemap->setConfig(new SitemapConfig($_POST));
         $sitemap->setBaseUrl($_POST['url']);
 
         /**
-         * Устанавливаем fetcher - модуль загрузки файлов по HTTP(S)
+         * Sets fetcher - HTTP(S) client
          */
         $sitemap->setFetcher(new GuzzleAdapter());
 
         /**
-         * Пакет парсинга Nokogiri выбран на основании сравнительного тестирования подобных
-         * решений для PHP на сайте Habrahabr.ru
+         * Sets HTML parsing module
          */
-        $sitemap->setParser(new ParserNokogiri());
+        $sitemap->setParser(new NokogiriAdapter());
 
         /**
-         * Экспорт в XML осуществляется с помощью XMLWriter, что показал лучшую производительность
-         * по сравнению с DOM
+         * Sets XML exporting module
          */
-        $sitemap->setExporter(new ExporterXmlWriter());
+        $sitemap->setExporter(new XmlWriterAdapter());
 
         /**
-         * Устанавливаем объек для сбора статистики
+         * Sets statistics gethering module
          */
         $sitemap->setStats(new Stat($id));
 
         /**
-         * Запуск генерации Sitemap
+         * Starts generation
          */
         $sitemap->execute();
 
         /**
-         * Создание объекта Вида для отрисовки страницы результата
+         * Creates View and renders results
          */
         $view = new SitemapView();
         $view->renderResult($sitemap);

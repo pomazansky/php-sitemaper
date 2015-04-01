@@ -3,7 +3,7 @@
 namespace PhpSitemaper\Exporters;
 
 /**
- * Интерфейс экспорта src в XML формат
+ * Sitemap XML exporter interface
  *
  * Interface ISitemapExporter
  * @package Sitemap\Exporters
@@ -11,28 +11,28 @@ namespace PhpSitemaper\Exporters;
 interface ISitemapExporter
 {
     /**
-     * Метод устанавливает путь к файлу для экспорта
+     * Sets export file path
      *
      * @param string $filename
      */
     public function setFilename($filename);
 
     /**
-     * Метод устанавливает базовый адрес для последующего добавления страниц
+     * Sets base URL
      *
      * @param $baseUrl
      */
     public function setBaseUrl($baseUrl);
 
     /**
-     * Метод инициирует новый документ заданного типа
+     * Sets params and initializes document
      *
      * @param string $mode
      */
     public function startDocument($mode = 'sitemap');
 
     /**
-     * Метод добавляет в XML-документ адрес страницы и опциональные параметры
+     * Adds URL with optional params to XML document
      *
      * @param string $loc
      * @param bool|string $lastMod
@@ -42,7 +42,7 @@ interface ISitemapExporter
     public function attachUrl($loc, $lastMod = false, $changeFreq = false, $priority = false);
 
     /**
-     * Метод добавляет в src Index адрес src
+     * Adds Sitemap file URL to Sitemap Index
      *
      * @param $loc
      * @param string $lastMod
@@ -50,8 +50,7 @@ interface ISitemapExporter
     public function attachSitemap($loc, $lastMod);
 
     /**
-     * Метод сохраняет XML-документ в указанный файл
-     *
+     * Saves XML to file
      */
     public function save();
 

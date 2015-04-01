@@ -5,34 +5,33 @@ namespace PhpSitemaper\Views;
 use PhpSitemaper\SitemapGenerator;
 
 /**
- * Главный класс Вида
- *
  * Class SitemapView
  * @package Sitemap\Views
  */
 class SitemapView extends View
 {
     /**
-     * Метод отображения главной формы
+     * Renders main form
      */
     public function renderIndex()
     {
         $this->template = $this->twig->loadTemplate('urlForm.twig');
         echo $this->template->render([
-            'template_path' => 'src/templates/twig/',
+            'template_path' => 'src/templates/',
             'title' => 'Sitemap Generator'
         ]);
     }
 
     /**
-     * Метод отображения страницы результатов
+     * Renders result page
+     *
      * @param SitemapGenerator $sitemap
      */
     public function renderResult(SitemapGenerator $sitemap)
     {
         $this->template = $this->twig->loadTemplate('result.twig');
         echo $this->template->render([
-            'template_path' => 'src/templates/twig/',
+            'template_path' => 'src/templates/',
             'title' => 'Sitemap Generator',
             'baseUrl' => $sitemap->getBaseUrl(),
             'linksCount' => $sitemap->getPagesCount(),

@@ -5,7 +5,7 @@ namespace PhpSitemaper;
 use PhpSitemaper\Views\View;
 
 /**
- * Вспомогательный класс приложения
+ * Application supporting class
  *
  * Class App
  * @package Sitemap
@@ -13,22 +13,28 @@ use PhpSitemaper\Views\View;
 class App
 {
     /**
-     * Экземпляр собственного класс
+     * Static instance
      *
      * @var App
      */
     private static $instance;
 
     /**
-     * Метод запрещает создавать объекты класса извне в соответствии с паттерном Singleton
+     * Defines constructor as protected
      */
     protected function __construct()
     {
-
     }
 
     /**
-     * Метод запуска вспомогательных инструментов
+     * Makes object coping impossible
+     */
+    protected function __clone()
+    {
+    }
+
+    /**
+     * Starts support function
      */
     public static function start()
     {
@@ -39,7 +45,7 @@ class App
     }
 
     /**
-     * Возвращает единственный экземпляр объекта своего класс по паттерну Singleton
+     * Returns self static instance
      *
      * @return App
      */
@@ -53,7 +59,7 @@ class App
     }
 
     /**
-     * Обработчик Исключений
+     * Exception Handler
      *
      * @param \Exception $e
      */
@@ -64,12 +70,5 @@ class App
             FILE_APPEND);
         $view = new View();
         $view->renderError($msg = $e->getMessage());
-    }
-
-    /**
-     * Метод запрещает копировать объекты класса извне в соответствии с паттерном Singleton
-     */
-    protected function __clone()
-    {
     }
 }
