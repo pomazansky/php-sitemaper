@@ -17,7 +17,7 @@ class FetcherGuzzle implements IFetcher
     private $baseUrl;
 
     /**
-     * URL
+     * Relative URL
      *
      * @var string
      */
@@ -41,7 +41,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод устанавливает базовый URL
+     * Set the base URL
      *
      * @param string $baseUrl
      */
@@ -51,7 +51,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод делает запрос GET по указанному URL
+     * Sends a GET request
      *
      * @param callable $callback
      * @return bool
@@ -68,7 +68,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод возвращает последний код ответа веб-сервера
+     * Returns web-server response code
      *
      * @return int
      */
@@ -78,7 +78,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод делает запрос HEAD по указанному URL
+     * Sends a HEAD request
      *
      * @param callable $callback
      * @return bool
@@ -95,7 +95,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод возвращает тело ответа веб-сервера
+     * Returns request body
      *
      * @return string
      */
@@ -105,7 +105,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод возвращает заголовки ответа веб-сервера
+     * Return request headers
      *
      * @return array
      */
@@ -121,7 +121,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод возвращает относительный URL
+     * Return relative URL
      *
      * @return string
      */
@@ -131,7 +131,7 @@ class FetcherGuzzle implements IFetcher
     }
 
     /**
-     * Метод устанавливает URL относительно базового
+     * Sets relative URL
      *
      * @param string $url
      */
