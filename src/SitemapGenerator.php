@@ -3,7 +3,7 @@
 namespace PhpSitemaper;
 
 use PhpSitemaper\Exporters\ISitemapExporter;
-use PhpSitemaper\Fetchers\IFetcher;
+use PhpSitemaper\Fetchers\IMultiFetcher;
 use PhpSitemaper\Parsers\IParser;
 
 /**
@@ -55,12 +55,12 @@ class SitemapGenerator
      *
      * @var array
      */
-    private $fetchQueue = [];
+    private $fetchQueue;
 
     /**
      * Объект загрузчика страниц
      *
-     * @var IFetcher
+     * @var IMultiFetcher
      */
     private $fetcher;
 
@@ -113,9 +113,9 @@ class SitemapGenerator
     /**
      * Установка загрузчика страниц
      *
-     * @param IFetcher $fetcher
+     * @param IMultiFetcher $fetcher
      */
-    public function setFetcher(IFetcher $fetcher)
+    public function setFetcher(IMultiFetcher $fetcher)
     {
         $this->fetcher = $fetcher;
     }
@@ -143,11 +143,13 @@ class SitemapGenerator
     /**
      * Проверка доступности страницы, принятие решения о добавлении в общий список ссылок
      * на основании проверки MIME-типа и, если полученный контенкт HTML - отправка на парсинг ссылок
+     * @param string $url
+     * @param array $headers
      */
-    public function touchPage()
+    public function touchPage($url, $headers)
     {
-        $page = new Page($this->fetcher->getUrl(), $this->config, $this->i);
-        $page->setHeaders($this->fetcher->getHeaders());
+        $page = new Page($url, $this->config, $this->i);
+        $page->setHeaders($headers);
 
         $this->stats->oneScanned($this->i);
 
@@ -160,23 +162,24 @@ class SitemapGenerator
         $this->stats->oneAdded($this->i);
 
         if ($this->i < $this->config->parseLevel && $page->isHtml()) {
-            $this->fetcher->get([$this, 'parsePage']);
+            $this->addToGetQueue($url);
         }
     }
 
     /**
      * Парсинг страницы и добавление найденых ссылок
+     * @param string $url
+     * @param string $html
      */
-    public function parsePage()
+    public function parsePage($url, $html)
     {
-
-        $this->parser->setHtml($this->fetcher->getContent());
+        $this->parser->setHtml($html);
 
         $parsedLinks = $this->parser->parse();
-        $filteredLinks = $this->filterLinks($parsedLinks, $this->fetcher->getUrl());
+        $filteredLinks = $this->filterLinks($parsedLinks, $url);
 
         foreach ($filteredLinks as $link) {
-            $this->addToQueue($link, $this->i);
+            $this->addToHeadQueue($link);
         }
     }
 
@@ -269,18 +272,33 @@ class SitemapGenerator
     }
 
     /**
-     * Добавление новой найденной ссылки в список страниц и очередь на загрузку
+     * Adds URL to HEAD queue
      *
      * @param string $url
-     * @param int $level
      */
-    public function addToQueue($url, $level = 0)
+    public function addToHeadQueue($url)
     {
-        if (!array_key_exists($url, $this->pages) && !in_array($url, $this->fetchQueue[$level],
-                true) && !in_array($url, $this->fetchQueue[$level + 1], true)
+        if (!array_key_exists($url, $this->pages) && !in_array($url, $this->fetchQueue['head'][$this->i + 1],
+                true)
         ) {
-            $this->fetchQueue[$level + 1][] = $url;
+            $this->fetchQueue['head'][$this->i + 1][] = $url;
         }
+    }
+
+    /**
+     * Adds URL to GET queue
+     *
+     * @param string $url
+     */
+    public function addToGetQueue($url)
+    {
+
+        if (!in_array($url, $this->fetchQueue['get'][$this->i],
+                true) && !in_array($url, $this->fetchQueue['get'][$this->i + 1], true)
+        ) {
+            $this->fetchQueue['get'][$this->i][] = $url;
+        }
+
     }
 
     /**
@@ -288,7 +306,9 @@ class SitemapGenerator
      */
     public function execute()
     {
-        $this->fetchQueue[0][] = '/';
+        $this->fetchQueue['head'][0][] = '/';
+        $this->fetchQueue['get'][0] = [];
+
         $this->stats->setStart(microtime(true));
         $this->stats->newLevel(0);
         $this->stats->inQueue(0, 1);
@@ -296,18 +316,16 @@ class SitemapGenerator
         $this->fetcher->setBaseUrl($this->getBaseUrl());
 
         for ($this->i = 0; $this->i < $this->config->parseLevel; $this->i++) {
-            $this->fetchQueue[$this->i + 1] = [];
+            $this->fetchQueue['head'][$this->i + 1] = [];
+            $this->fetchQueue['get'][$this->i + 1] = [];
 
             $this->stats->newLevel($this->i);
-            $this->stats->inQueue($this->i, count($this->fetchQueue[$this->i]));
+            $this->stats->inQueue($this->i, count($this->fetchQueue['head'][$this->i]));
 
-            foreach ($this->fetchQueue[$this->i] as $url) {
-                $this->fetcher->setUrl($url);
+            $this->fetcher->headPool($this->fetchQueue['head'][$this->i], [$this, 'touchPage']);
+            $this->fetcher->getPool($this->fetchQueue['get'][$this->i], [$this, 'parsePage']);
 
-                $this->fetcher->head([$this, 'touchPage']);
-            }
-
-            if (count($this->fetchQueue[$this->i + 1]) === 0) {
+            if (count($this->fetchQueue['head'][$this->i + 1]) === 0) {
                 break;
             }
         }

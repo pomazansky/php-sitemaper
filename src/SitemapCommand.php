@@ -3,7 +3,7 @@
 namespace PhpSitemaper;
 
 use PhpSitemaper\Exporters\ExporterXmlWriter;
-use PhpSitemaper\Fetchers\FetcherGuzzle;
+use PhpSitemaper\Fetchers\GuzzleAdapter;
 use PhpSitemaper\Parsers\ParserNokogiri;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -59,7 +59,7 @@ class SitemapCommand extends Command
         $sitemap->setBaseUrl($input->getArgument('url'));
         $sitemap->setConfig(new SitemapConfig($input->getOptions()));
 
-        $sitemap->setFetcher(new FetcherGuzzle());
+        $sitemap->setFetcher(new GuzzleAdapter());
 
         /**
          * Пакет парсинга Nokogiri выбран на основании сравнительного тестирования подобных
