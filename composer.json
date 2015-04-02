@@ -14,7 +14,8 @@
     "twig/twig": "~1.0",
     "olamedia/nokogiri": "dev-master",
     "symfony/console": "3.0.*@dev",
-    "guzzlehttp/guzzle": "5.0.*@dev"
+    "guzzlehttp/guzzle": "5.0.*@dev",
+    "silex/silex": "1.2.x-dev"
   },
   "autoload": {
     "psr-4": {"PhpSitemaper\\": "src/"}
