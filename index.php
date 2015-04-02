@@ -2,23 +2,25 @@
 
 namespace PhpSitemaper;
 
-/**
- * Composer Autoload
- */
+use PhpSitemaper\Controllers\SitemapController;
+use Silex\Application;
+
 require_once 'vendor/autoload.php';
 
-App::start();
+$app = new Application();
 
-/**
- * Initializing router and defining routes
- */
-$router = Router::getInstance();
+$app['debug'] = true;
 
-$router->add('get', '/', ['sitemap']);
-$router->add('post', '/',['sitemap','generate']);
+$app->get('/', function(){
+    $controller = new SitemapController();
+    $controller->indexAction();
+    return true;
+});
 
+$app->post('/', function(){
+   $controller = new SitemapController();
+    $controller->generateAction();
+    return true;
+});
 
-/**
- * Router execution
- */
-$router->execute();
+$app->run();
