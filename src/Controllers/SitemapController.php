@@ -16,24 +16,29 @@ use PhpSitemaper\Views\SitemapView;
  */
 class SitemapController
 {
+
     /**
      * Default action. Creates View for rendering main form
+     *
+     * @return string
      */
     public function indexAction()
     {
         $view = new SitemapView();
-        $view->renderIndex();
+        return $view->renderIndex();
     }
 
     /**
      * Sitemap generation action
+     *
+     * @return string
      */
     public function generateAction()
     {
         /**
          * Generates process id
          */
-        $sessionId = SitemapGenerator::genId();
+        $sessionId = SitemapGenerator::genSessionId();
         $_SESSION['sessionId'] = $sessionId;
 
         /**
@@ -72,6 +77,6 @@ class SitemapController
          * Creates View and renders results
          */
         $view = new SitemapView();
-        $view->renderResult($sitemap);
+        return $view->renderResult($sitemap);
     }
 }

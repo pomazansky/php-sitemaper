@@ -11,16 +11,14 @@ $app = new Application();
 
 $app['debug'] = true;
 
-$app->get('/', function(){
+$app->get('/', function () {
     $controller = new SitemapController();
-    $controller->indexAction();
-    return true;
+    return $controller->indexAction();
 });
 
-$app->post('/', function(){
-   $controller = new SitemapController();
-    $controller->generateAction();
-    return true;
+$app->post('/', function () {
+    $controller = new SitemapController();
+    return $controller->generateAction();
 });
 
 $app->run();

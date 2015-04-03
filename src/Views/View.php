@@ -37,11 +37,13 @@ class View
 
     /**
      * Renders 404 error
+     *
+     * @return string
      */
     public function render404()
     {
         $this->template = $this->twig->loadTemplate('error.twig');
-        echo $this->template->render(
+        return $this->template->render(
             [
             'title' => '404 Error: Page not found',
             'template_path' => 'src/templates/',
@@ -55,11 +57,12 @@ class View
      * Renders Error page
      *
      * @param string $msg
+     * @return string
      */
     public function renderError($msg = '')
     {
         $this->template = $this->twig->loadTemplate('error.twig');
-        echo $this->template->render([
+        return $this->template->render([
             'title' => 'We are sorry, but an error happened',
             'template_path' => 'src/templates/',
             'msg' => $msg ?: 'We are trying our best to fix it. Please, come back later.',

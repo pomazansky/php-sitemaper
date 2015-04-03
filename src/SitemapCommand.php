@@ -75,7 +75,7 @@ class SitemapCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sessionId = SitemapGenerator::genId();
+        $sessionId = SitemapGenerator::genSessionId();
 
         $sitemap = new SitemapGenerator();
 

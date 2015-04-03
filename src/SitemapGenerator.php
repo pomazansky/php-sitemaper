@@ -102,7 +102,7 @@ class SitemapGenerator
      *
      * @return string
      */
-    public static function genId()
+    public static function genSessionId()
     {
         return time() . '-' . uniqid();
     }
@@ -180,13 +180,11 @@ class SitemapGenerator
      */
     public function addToGetQueue($url)
     {
-
         if (!in_array($url, $this->fetchQueue['get'][$this->currentLevel], true)
             && !in_array($url, $this->fetchQueue['get'][$this->currentLevel + 1], true)
         ) {
             $this->fetchQueue['get'][$this->currentLevel][] = $url;
         }
-
     }
 
     /**
@@ -197,6 +195,10 @@ class SitemapGenerator
      */
     public function parseResource($resourceUrl, $html)
     {
+        if (empty($html)) {
+            unset($this->resources[$resourceUrl]);
+            return;
+        }
         $this->parser->setHtml($html);
 
         $parsedLinks = $this->parser->parse();
@@ -220,31 +222,26 @@ class SitemapGenerator
     {
         $url = parse_url($url);
 
-        if (!empty($url['path']) && strpos($url['path'], './') !== false) {
+        if (isset($url['path']) && strpos($url['path'], './') !== false) {
             $url['path'] = $this->reformatPath($url['path'], $currentUrl);
         }
 
-        $baseUrl = $this->getBaseUrlParts();
-
-        if (!empty($url['scheme']) && $url['scheme'] !== $baseUrl['scheme']) {
+        if (isset($url['scheme']) && $url['scheme'] !== $this->baseUrl['scheme']) {
             return false;
         }
 
-        if (!empty($url['host']) && $url['host'] !== $baseUrl['host']) {
+        if (isset($url['host']) && $url['host'] !== $this->baseUrl['host']) {
             return false;
         }
 
-        if (!empty($url['port']) && $url['port'] !== $baseUrl['port']) {
+        if (isset($url['port']) && $url['port'] !== $this->baseUrl['port']) {
             return false;
         }
 
         $path = !empty($url['path']) ? $url['path'] : '/';
         $query = !empty($url['query']) ? "?{$url['query']}" : '';
-        $fragment = /*isset($url['fragment']) ? "#{$url['fragment']}" :*/
-            '';
 
-        return "$path$query$fragment";
-
+        return "$path$query";
     }
 
     /**
@@ -256,7 +253,6 @@ class SitemapGenerator
      */
     public function reformatPath($pathStr, $basePathStr)
     {
-
         $basePathStr = trim($basePathStr, '/');
 
         $path = explode('/', $pathStr);
@@ -279,16 +275,6 @@ class SitemapGenerator
         $newPath = '/' . implode('/', $newPath);
 
         return $newPath;
-    }
-
-    /**
-     * Return base URL as array of elements
-     *
-     * @return array
-     */
-    public function getBaseUrlParts()
-    {
-        return $this->baseUrl;
     }
 
     /**
@@ -447,7 +433,7 @@ class SitemapGenerator
      */
     private function genSitemapFilename($mode = 'sitemap')
     {
-        return $this->getBaseUrlParts()['host'] . '-' . time() . "-{$mode}.xml";
+        return $this->baseUrl['host'] . '-' . time() . "-{$mode}.xml";
     }
 
     /**
