@@ -10,13 +10,16 @@ use PhpSitemaper\SitemapGenerator;
 use PhpSitemaper\Stat;
 use PhpSitemaper\Views\View;
 use Silex\Application;
+use Silex\ControllerCollection;
+use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SitemapController
  * @package Sitemap\Controllers
  */
-class SitemapController
+class SitemapController implements ControllerProviderInterface
 {
 
     /**
@@ -29,7 +32,7 @@ class SitemapController
     public function indexAction(Request $request, Application $app)
     {
         $view = new View();
-        return $view->renderIndex($app);
+        return new Response($view->renderIndex($app));
     }
 
     /**
@@ -45,13 +48,19 @@ class SitemapController
          * Generates process id
          */
         $sessionId = SitemapGenerator::genSessionId();
-        $_SESSION['sessionId'] = $sessionId;
+        $app['session']->set('sessionId', $sessionId);
 
         /**
          * Creates sitemap object and sets basic params
          */
         $sitemap = new SitemapGenerator();
-        $sitemap->setConfig(new SitemapConfig($_POST));
+        $sitemap->setConfig(new SitemapConfig([
+            'parseLevel' => $request->get('parseLevel'),
+            'changeFreq' => $request->get('changeFreq'),
+            'lastMod' => $request->get('lastMod'),
+            'priority' => $request->get('priority'),
+            'gzip' => $request->get('gzip')
+        ]));
         $sitemap->setBaseUrl($request->get('url'));
 
         /**
@@ -83,6 +92,24 @@ class SitemapController
          * Creates View and renders results
          */
         $view = new View();
-        return $view->renderResult($app, $sitemap);
+        return new Response($view->renderResult($app, $sitemap));
+    }
+
+    /**
+     * Returns routes to connect to the given application.
+     *
+     * @param Application $app An Application instance
+     *
+     * @return ControllerCollection A ControllerCollection instance
+     */
+    public function connect(Application $app)
+    {
+        $factory = $app['controllers_factory'];
+
+        $factory->get('/', '\\PhpSitemaper\\Controllers\\SitemapController::indexAction');
+
+        $factory->post('/', '\\PhpSitemaper\\Controllers\\SitemapController::generateAction');
+
+        return $factory;
     }
 }
