@@ -8,7 +8,7 @@ use PhpSitemaper\Parsers\NokogiriAdapter;
 use PhpSitemaper\SitemapConfig;
 use PhpSitemaper\SitemapGenerator;
 use PhpSitemaper\Stat;
-use PhpSitemaper\Views\SitemapView;
+use PhpSitemaper\Views\View;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,8 +28,8 @@ class SitemapController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $view = new SitemapView();
-        return $view->renderIndex();
+        $view = new View();
+        return $view->renderIndex($app);
     }
 
     /**
@@ -82,7 +82,7 @@ class SitemapController
         /**
          * Creates View and renders results
          */
-        $view = new SitemapView();
-        return $view->renderResult($sitemap);
+        $view = new View();
+        return $view->renderResult($app, $sitemap);
     }
 }
