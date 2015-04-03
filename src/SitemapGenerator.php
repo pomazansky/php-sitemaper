@@ -192,62 +192,59 @@ class SitemapGenerator
     /**
      * Page parsing and adding retrieved URLs to queue
      *
-     * @param string $url
+     * @param $resourceUrl
      * @param string $html
      */
-    public function parseResource($url, $html)
+    public function parseResource($resourceUrl, $html)
     {
         $this->parser->setHtml($html);
 
         $parsedLinks = $this->parser->parse();
-        $filteredLinks = $this->filterLinks($parsedLinks, $url);
 
-        foreach ($filteredLinks as $url) {
-            $this->addToHeadQueue($url);
+        foreach ($parsedLinks as $link) {
+            $filteredUrl = $this->filterLink($link, $resourceUrl);
+            if ($filteredUrl) {
+                $this->addToHeadQueue($filteredUrl);
+            }
         }
     }
 
     /**
-     * Filters founded links due to Sitemap specs
+     * Filters founded link due to Sitemap specs
      *
-     * @param array $parsedLinks
-     * @param string $currentUrl
-     * @return array
+     * @param $url
+     * @param $currentUrl
+     * @return bool|string
      */
-    private function filterLinks(array $parsedLinks, $currentUrl)
+    private function filterLink($url, $currentUrl)
     {
-        $filteredLinks = [];
+        $url = parse_url($url);
 
-        foreach ($parsedLinks as $link) {
-            $url = parse_url($link);
-
-            if (!empty($url['path']) && strpos($url['path'], './') !== false) {
-                $url['path'] = $this->reformatPath($url['path'], $currentUrl);
-            }
-
-            $baseUrl = $this->getBaseUrlParts();
-
-            if (!empty($url['scheme']) && $url['scheme'] !== $baseUrl['scheme']) {
-                continue;
-            }
-
-            if (!empty($url['host']) && $url['host'] !== $baseUrl['host']) {
-                continue;
-            }
-
-            if (!empty($url['port']) && $url['port'] !== $baseUrl['port']) {
-                continue;
-            }
-
-            $path = !empty($url['path']) ? $url['path'] : '/';
-            $query = !empty($url['query']) ? "?{$url['query']}" : '';
-            $fragment = /*isset($url['fragment']) ? "#{$url['fragment']}" :*/
-                '';
-
-            $filteredLinks[] = "$path$query$fragment";
+        if (!empty($url['path']) && strpos($url['path'], './') !== false) {
+            $url['path'] = $this->reformatPath($url['path'], $currentUrl);
         }
 
-        return array_unique($filteredLinks);
+        $baseUrl = $this->getBaseUrlParts();
+
+        if (!empty($url['scheme']) && $url['scheme'] !== $baseUrl['scheme']) {
+            return false;
+        }
+
+        if (!empty($url['host']) && $url['host'] !== $baseUrl['host']) {
+            return false;
+        }
+
+        if (!empty($url['port']) && $url['port'] !== $baseUrl['port']) {
+            return false;
+        }
+
+        $path = !empty($url['path']) ? $url['path'] : '/';
+        $query = !empty($url['query']) ? "?{$url['query']}" : '';
+        $fragment = /*isset($url['fragment']) ? "#{$url['fragment']}" :*/
+            '';
+
+        return "$path$query$fragment";
+
     }
 
     /**
