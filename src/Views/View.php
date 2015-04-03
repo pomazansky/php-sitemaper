@@ -41,12 +41,14 @@ class View
     public function render404()
     {
         $this->template = $this->twig->loadTemplate('error.twig');
-        echo $this->template->render([
+        echo $this->template->render(
+            [
             'title' => '404 Error: Page not found',
             'template_path' => 'src/templates/',
             'msg' => '',
             'headling' => '404 Error: Page not found'
-        ]);
+            ]
+        );
     }
 
     /**

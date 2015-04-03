@@ -48,5 +48,4 @@ interface MultiFetcherInterface
      * @param CompleteEvent $event
      */
     public function onGetComplete(CompleteEvent $event);
-
 }

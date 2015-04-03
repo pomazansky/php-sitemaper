@@ -25,34 +25,57 @@ class SitemapCommand extends Command
     protected function configure()
     {
 
-        $defaltConfig = new SitemapConfig();
+        $defaultConfig = new SitemapConfig();
 
         $this->setName('generate')
             ->setDescription('Generates Sitemap for URL address')
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('url', InputArgument::REQUIRED, 'URL to start parse'),
-                new InputOption('parseLevel', 'l', InputOption::VALUE_OPTIONAL, 'Parse Level',
-                    $defaltConfig->parseLevel),
-                new InputOption('changeFreq', 'f', InputOption::VALUE_OPTIONAL, 'How often do pages change',
-                    $defaltConfig->changeFreq),
-                new InputOption('lastMod', 'm', InputOption::VALUE_OPTIONAL, 'How to get Last Modified value',
-                    $defaltConfig->lastMod),
-                new InputOption('priority', 'p', InputOption::VALUE_OPTIONAL, 'Calculate page priority',
-                    $defaltConfig->priority),
-                new InputOption('gzip', 'z', InputOption::VALUE_OPTIONAL, 'GZip resulting files', $defaltConfig->gzip)
-            ]);
+                new InputOption(
+                    'parseLevel',
+                    'l',
+                    InputOption::VALUE_OPTIONAL,
+                    'Parse Level',
+                    $defaultConfig->parseLevel
+                ),
+                new InputOption(
+                    'changeFreq',
+                    'f',
+                    InputOption::VALUE_OPTIONAL,
+                    'How often do pages change',
+                    $defaultConfig->changeFreq
+                ),
+                new InputOption(
+                    'lastMod',
+                    'm',
+                    InputOption::VALUE_OPTIONAL,
+                    'How to get Last Modified value',
+                    $defaultConfig->lastMod
+                ),
+                new InputOption(
+                    'priority',
+                    'p',
+                    InputOption::VALUE_OPTIONAL,
+                    'Calculate page priority',
+                    $defaultConfig->priority
+                ),
+                new InputOption('gzip', 'z', InputOption::VALUE_OPTIONAL, 'GZip resulting files', $defaultConfig->gzip)
+                ]
+            );
 
     }
 
     /**
      * Console command execution
      *
-     * @param InputInterface $input
+     * @param  InputInterface  $input
      * @param OutputInterface $output
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $id = SitemapGenerator::genId();
+        $sessionId = SitemapGenerator::genId();
 
         $sitemap = new SitemapGenerator();
 
@@ -74,11 +97,13 @@ class SitemapCommand extends Command
         /**
          * Sets stats object
          */
-        $sitemap->setStats(new Stat($id));
+        $sitemap->setStats(new Stat($sessionId));
 
         /**
          * Sitemap generation
          */
         $sitemap->execute();
+
+        return 0;
     }
 }

@@ -8,7 +8,7 @@ use PhpSitemaper\Parsers\ParserInterface;
 
 /**
  * Class SitemapGenerator
- * @package src
+ * @package PhpSitemaper
  */
 class SitemapGenerator
 {
@@ -43,7 +43,7 @@ class SitemapGenerator
     /**
      * Array of enlisted pages
      *
-     * @var Resource[]
+     * @var \PhpSitemaper\Resource[]
      */
     private $resources = [];
 
@@ -80,7 +80,7 @@ class SitemapGenerator
      *
      * @var int
      */
-    private $i;
+    private $currentLevel;
 
     /**
      * Statistic gethering object
@@ -95,6 +95,16 @@ class SitemapGenerator
     public function __construct()
     {
         $this->config = new SitemapConfig();
+    }
+
+    /**
+     * Generates process id
+     *
+     * @return string
+     */
+    public static function genId()
+    {
+        return time() . '-' . uniqid();
     }
 
     /**
@@ -145,10 +155,10 @@ class SitemapGenerator
      */
     public function touchResource($url, $headers)
     {
-        $resource = new Resource($url, $this->config, $this->i);
+        $resource = new Resource($url, $this->config, $this->currentLevel);
         $resource->setHeaders($headers);
 
-        $this->stats->oneScanned($this->i);
+        $this->stats->oneScanned($this->currentLevel);
 
         if (!$resource->isValidContent()) {
             return;
@@ -156,11 +166,27 @@ class SitemapGenerator
 
         $this->resources[$resource->getUrl()] = $resource;
 
-        $this->stats->oneAdded($this->i);
+        $this->stats->oneAdded($this->currentLevel);
 
-        if ($this->i < $this->config->parseLevel && $resource->isHtml()) {
+        if ($this->currentLevel < $this->config->parseLevel && $resource->isHtml()) {
             $this->addToGetQueue($url);
         }
+    }
+
+    /**
+     * Adds URL to GET queue
+     *
+     * @param string $url
+     */
+    public function addToGetQueue($url)
+    {
+
+        if (!in_array($url, $this->fetchQueue['get'][$this->currentLevel], true)
+            && !in_array($url, $this->fetchQueue['get'][$this->currentLevel + 1], true)
+        ) {
+            $this->fetchQueue['get'][$this->currentLevel][] = $url;
+        }
+
     }
 
     /**
@@ -176,8 +202,8 @@ class SitemapGenerator
         $parsedLinks = $this->parser->parse();
         $filteredLinks = $this->filterLinks($parsedLinks, $url);
 
-        foreach ($filteredLinks as $link) {
-            $this->addToHeadQueue($link);
+        foreach ($filteredLinks as $url) {
+            $this->addToHeadQueue($url);
         }
     }
 
@@ -188,12 +214,11 @@ class SitemapGenerator
      * @param string $currentUrl
      * @return array
      */
-    private function filterLinks(array $parsedLinks = [], $currentUrl)
+    private function filterLinks(array $parsedLinks, $currentUrl)
     {
         $filteredLinks = [];
 
         foreach ($parsedLinks as $link) {
-
             $url = parse_url($link);
 
             if (!empty($url['path']) && strpos($url['path'], './') !== false) {
@@ -276,27 +301,11 @@ class SitemapGenerator
      */
     public function addToHeadQueue($url)
     {
-        if (!array_key_exists($url, $this->resources) && !in_array($url, $this->fetchQueue['head'][$this->i + 1],
-                true)
+        if (!array_key_exists($url, $this->resources)
+            && !in_array($url, $this->fetchQueue['head'][$this->currentLevel + 1], true)
         ) {
-            $this->fetchQueue['head'][$this->i + 1][] = $url;
+            $this->fetchQueue['head'][$this->currentLevel + 1][] = $url;
         }
-    }
-
-    /**
-     * Adds URL to GET queue
-     *
-     * @param string $url
-     */
-    public function addToGetQueue($url)
-    {
-
-        if (!in_array($url, $this->fetchQueue['get'][$this->i],
-                true) && !in_array($url, $this->fetchQueue['get'][$this->i + 1], true)
-        ) {
-            $this->fetchQueue['get'][$this->i][] = $url;
-        }
-
     }
 
     /**
@@ -313,17 +322,17 @@ class SitemapGenerator
 
         $this->fetcher->setBaseUrl($this->getBaseUrl());
 
-        for ($this->i = 0; $this->i < $this->config->parseLevel; $this->i++) {
-            $this->fetchQueue['head'][$this->i + 1] = [];
-            $this->fetchQueue['get'][$this->i + 1] = [];
+        for ($this->currentLevel = 0; $this->currentLevel < $this->config->parseLevel; $this->currentLevel++) {
+            $this->fetchQueue['head'][$this->currentLevel + 1] = [];
+            $this->fetchQueue['get'][$this->currentLevel + 1] = [];
 
-            $this->stats->newLevel($this->i);
-            $this->stats->inQueue($this->i, count($this->fetchQueue['head'][$this->i]));
+            $this->stats->newLevel($this->currentLevel);
+            $this->stats->inQueue($this->currentLevel, count($this->fetchQueue['head'][$this->currentLevel]));
 
-            $this->fetcher->headPool($this->fetchQueue['head'][$this->i], [$this, 'touchResource']);
-            $this->fetcher->getPool($this->fetchQueue['get'][$this->i], [$this, 'parseResource']);
+            $this->fetcher->headPool($this->fetchQueue['head'][$this->currentLevel], [$this, 'touchResource']);
+            $this->fetcher->getPool($this->fetchQueue['get'][$this->currentLevel], [$this, 'parseResource']);
 
-            if (count($this->fetchQueue['head'][$this->i + 1]) === 0) {
+            if (count($this->fetchQueue['head'][$this->currentLevel + 1]) === 0) {
                 break;
             }
         }
@@ -384,13 +393,15 @@ class SitemapGenerator
         $this->exporter->startDocument();
 
         foreach ($this->resources as $resource) {
-
-            $this->exporter->attachUrl($resource->getUrl(), $resource->getLastMod(), $resource->getChangeFreq(),
-                $resource->getPriority());
+            $this->exporter->attachUrl(
+                $resource->getUrl(),
+                $resource->getLastMod(),
+                $resource->getChangeFreq(),
+                $resource->getPriority()
+            );
 
             $writtenUrls++;
             if ($writtenUrls === 50000 || filesize('download/' . $this->sitemapFiles[$currentFileIndex]) > 10484000) {
-
                 $this->exporter->save();
                 $currentFileIndex++;
                 $writtenUrls = 0;
@@ -418,7 +429,6 @@ class SitemapGenerator
             $this->exporter->startDocument('sitemapindex');
 
             foreach ($this->sitemapFiles as $filename) {
-
                 $this->exporter->attachSitemap($this->getBaseUrl() . '/' . $filename, date(DATE_W3C, time()));
             }
 
@@ -492,15 +502,5 @@ class SitemapGenerator
     public function setStats(Stat $stats)
     {
         $this->stats = $stats;
-    }
-
-    /**
-     * Generates process id
-     *
-     * @return string
-     */
-    public static function genId()
-    {
-        return time() . '-' . uniqid();
     }
 }

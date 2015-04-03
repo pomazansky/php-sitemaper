@@ -93,9 +93,10 @@ class SitemapConfig
      */
     public function setChangeFreq($changeFreq)
     {
-        $this->changeFreq = $this->checkParam($changeFreq,
-            ['', 'always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']) ?
-            $changeFreq : $this->changeFreq;
+        $this->changeFreq = $this->checkParam(
+            $changeFreq,
+            ['', 'always','hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']
+        ) ? $changeFreq : $this->changeFreq;
     }
 
     /**

@@ -119,14 +119,14 @@ class Resource
     public function setLastMod()
     {
         switch ($this->config->lastMod) {
-            case 'response' :
+            case 'response':
                 $this->parseHeadersForLastModified();
                 break;
-            case 'current' :
+            case 'current':
                 $this->lastMod = date(DATE_W3C, time());
                 break;
-            case '' :
-            default :
+            case '':
+            default:
         }
     }
 

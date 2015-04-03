@@ -33,8 +33,8 @@ class SitemapController
         /**
          * Generates process id
          */
-        $id = SitemapGenerator::genId();
-        $_SESSION['id'] = $id;
+        $sessionId = SitemapGenerator::genId();
+        $_SESSION['sessionId'] = $sessionId;
 
         /**
          * Creates sitemap object and sets basic params
@@ -61,7 +61,7 @@ class SitemapController
         /**
          * Sets statistics gethering module
          */
-        $sitemap->setStats(new Stat($id));
+        $sitemap->setStats(new Stat($sessionId));
 
         /**
          * Starts generation

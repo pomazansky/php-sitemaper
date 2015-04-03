@@ -53,5 +53,4 @@ interface ExporterInterface
      * Saves XML to file
      */
     public function save();
-
 }

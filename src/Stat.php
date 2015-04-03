@@ -11,11 +11,11 @@ namespace PhpSitemaper;
 class Stat
 {
     /**
-     * Process id
+     * Session id
      *
      * @var string
      */
-    private $id;
+    private $sessionId;
 
     /**
      * Nesting levels stat
@@ -41,11 +41,11 @@ class Stat
     /**
      * Sets process id on creation
      *
-     * @param string $id
+     * @param string $sessionId
      */
-    public function __construct($id)
+    public function __construct($sessionId)
     {
-        $this->id = $id;
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -92,7 +92,7 @@ class Stat
      */
     private function saveToFile()
     {
-        file_put_contents('cache/stats/' . $this->id, json_encode([
+        file_put_contents('cache/stats/' . $this->sessionId, json_encode([
             'started' => $this->started,
             'ended' => $this->ended,
             'levels' => $this->levels

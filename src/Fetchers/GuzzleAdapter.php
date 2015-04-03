@@ -2,11 +2,14 @@
 
 namespace PhpSitemaper\Fetchers;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Event\CompleteEvent;
 use GuzzleHttp\Pool;
 
+/**
+ * Class GuzzleAdapter
+ * @package PhpSitemaper\Fetchers
+ */
 class GuzzleAdapter implements MultiFetcherInterface
 {
 
@@ -59,7 +62,7 @@ class GuzzleAdapter implements MultiFetcherInterface
     /**
      * Does multiple HTTP HEAD requests
      *
-     * @param array $urls
+     * @param array    $urls
      * @param callable $complete
      */
     public function headPool(array $urls, callable $complete)

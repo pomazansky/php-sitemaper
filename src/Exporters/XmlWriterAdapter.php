@@ -53,11 +53,11 @@ class XmlWriterAdapter implements ExporterInterface
         $this->writer->startDocument('1.0', 'UTF-8');
 
         switch ($mode) {
-            case 'sitemapindex' :
+            case 'sitemapindex':
                 $this->writer->startElement('sitemapindex');
                 break;
             case 'sitemap':
-            default :
+            default:
                 $this->writer->startElement('urlset');
         }
 
@@ -66,8 +66,10 @@ class XmlWriterAdapter implements ExporterInterface
          */
         $this->writer->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        $this->writer->writeAttribute('xsi:schemaLocation',
-            "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/{$mode}.xsd");
+        $this->writer->writeAttribute(
+            'xsi:schemaLocation',
+            "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/{$mode}.xsd"
+        );
 
         $this->writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
     }
