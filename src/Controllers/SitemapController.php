@@ -9,6 +9,8 @@ use PhpSitemaper\SitemapConfig;
 use PhpSitemaper\SitemapGenerator;
 use PhpSitemaper\Stat;
 use PhpSitemaper\Views\SitemapView;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SitemapController
@@ -20,9 +22,11 @@ class SitemapController
     /**
      * Default action. Creates View for rendering main form
      *
+     * @param Request $request
+     * @param Application $app
      * @return string
      */
-    public function indexAction()
+    public function indexAction(Request $request, Application $app)
     {
         $view = new SitemapView();
         return $view->renderIndex();
@@ -31,9 +35,11 @@ class SitemapController
     /**
      * Sitemap generation action
      *
+     * @param Request $request
+     * @param Application $app
      * @return string
      */
-    public function generateAction()
+    public function generateAction(Request $request, Application $app)
     {
         /**
          * Generates process id
@@ -46,7 +52,7 @@ class SitemapController
          */
         $sitemap = new SitemapGenerator();
         $sitemap->setConfig(new SitemapConfig($_POST));
-        $sitemap->setBaseUrl($_POST['url']);
+        $sitemap->setBaseUrl($request->get('url'));
 
         /**
          * Sets fetcher - HTTP(S) client
