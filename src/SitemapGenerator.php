@@ -43,7 +43,7 @@ class SitemapGenerator
     /**
      * Array of enlisted pages
      *
-     * @var \PhpSitemaper\Resource[]
+     * @var \PhpSitemaper\ResourceEntry[]
      */
     private $resources = [];
 
@@ -155,7 +155,7 @@ class SitemapGenerator
      */
     public function touchResource($url, $headers)
     {
-        $resource = new Resource($url, $this->config, $this->currentLevel);
+        $resource = new ResourceEntry($url, $this->config, $this->currentLevel);
         $resource->setHeaders($headers);
 
         $this->stats->oneScanned($this->currentLevel);

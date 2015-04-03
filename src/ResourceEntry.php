@@ -6,7 +6,7 @@ namespace PhpSitemaper;
  * Class Page
  * @package Sitemap
  */
-class Resource
+class ResourceEntry
 {
     /**
      * Relative page address
