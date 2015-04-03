@@ -2,6 +2,8 @@
 
 namespace PhpSitemaper\Exporters;
 
+use PhpSitemaper\ResourceEntry;
+
 /**
  * Sitemap XML exporter with XMLWriter
  *
@@ -86,28 +88,24 @@ class XmlWriterAdapter implements ExporterInterface
 
     /**
      * Adds URL with optional params to XML document
-     *
-     * @param string $loc
-     * @param null|string $lastMod
-     * @param null|string $changeFreq
-     * @param null|float $priority
+     * @param ResourceEntry $resource
      */
-    public function attachUrl($loc, $lastMod = null, $changeFreq = null, $priority = null)
+    public function attachUrl(ResourceEntry $resource)
     {
         $this->writer->startElement('url');
 
-        $this->writer->writeElement('loc', $this->baseUrl . $loc);
+        $this->writer->writeElement('loc', $this->baseUrl . $resource->getUrl());
 
-        if ($lastMod !== null) {
-            $this->writer->writeElement('lastmod', $lastMod);
+        if ($resource->getLastMod() !== null) {
+            $this->writer->writeElement('lastmod', $resource->getLastMod());
         }
 
-        if ($changeFreq !== null) {
-            $this->writer->writeElement('changefreq', $changeFreq);
+        if ($resource->getChangeFreq() !== null) {
+            $this->writer->writeElement('changefreq', $resource->getChangeFreq());
         }
 
-        if ($priority !== null) {
-            $this->writer->writeElement('priority', number_format($priority, 2));
+        if ($resource->getPriority() !== null) {
+            $this->writer->writeElement('priority', number_format($resource->getPriority(), 2));
         }
 
         $this->writer->endElement();

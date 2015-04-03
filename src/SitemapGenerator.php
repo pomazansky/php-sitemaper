@@ -376,12 +376,7 @@ class SitemapGenerator
         $this->exporter->startDocument();
 
         foreach ($this->resources as $resource) {
-            $this->exporter->attachUrl(
-                $resource->getUrl(),
-                $resource->getLastMod(),
-                $resource->getChangeFreq(),
-                $resource->getPriority()
-            );
+            $this->exporter->attachUrl($resource);
 
             $writtenUrls++;
             if ($writtenUrls === 50000 || filesize('download/' . $this->sitemapFiles[$currentFileIndex]) > 10484000) {

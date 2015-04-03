@@ -2,6 +2,8 @@
 
 namespace PhpSitemaper\Exporters;
 
+use PhpSitemaper\ResourceEntry;
+
 /**
  * Sitemap XML exporter interface
  *
@@ -34,12 +36,10 @@ interface ExporterInterface
     /**
      * Adds URL with optional params to XML document
      *
-     * @param string $loc
-     * @param bool|string $lastMod
-     * @param bool|string $changeFreq
-     * @param bool|float $priority
+     * @param ResourceEntry $resource
+     * @return
      */
-    public function attachUrl($loc, $lastMod = false, $changeFreq = false, $priority = false);
+    public function attachUrl(ResourceEntry $resource);
 
     /**
      * Adds Sitemap file URL to Sitemap Index
