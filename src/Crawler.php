@@ -9,7 +9,8 @@ use PhpSitemaper\Parsers\ParserInterface;
  * Class Crawler
  * @package PhpSitemaper
  */
-class Crawler {
+class Crawler
+{
 
     /**
      * Owner object
@@ -157,24 +158,18 @@ class Crawler {
     {
         $url = parse_url($url);
 
+        foreach (['scheme', 'host', 'port'] as $elementName) {
+            if (isset($url[$elementName]) && $url[$elementName] !== $this->baseUrl[$elementName]) {
+                return false;
+            }
+        }
+
         if (isset($url['path']) && strpos($url['path'], './') !== false) {
             $url['path'] = $this->reformatPath($url['path'], $currentUrl);
         }
 
-        if (isset($url['scheme']) && $url['scheme'] !== $this->baseUrl['scheme']) {
-            return false;
-        }
-
-        if (isset($url['host']) && $url['host'] !== $this->baseUrl['host']) {
-            return false;
-        }
-
-        if (isset($url['port']) && $url['port'] !== $this->baseUrl['port']) {
-            return false;
-        }
-
-        $path = !empty($url['path']) ? $url['path'] : '/';
-        $query = !empty($url['query']) ? "?{$url['query']}" : '';
+        $path = $url['path'] ?: '/';
+        $query = $url['query'] ?: '';
 
         return "$path$query";
     }
