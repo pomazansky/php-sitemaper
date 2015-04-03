@@ -49,6 +49,7 @@ class View
     /**
      * Renders 404 error
      *
+     * @param Application $app
      * @return string
      */
     public function render404(Application $app)
