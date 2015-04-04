@@ -10,12 +10,11 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0",
-    "twig/twig": "~1.0",
     "olamedia/nokogiri": "dev-master",
-    "symfony/console": "3.0.*@dev",
+    "symfony/console": "2.7.x-dev",
     "guzzlehttp/guzzle": "5.0.*@dev",
-    "silex/silex": "1.2.x-dev"
+    "silex/silex": "1.2.x-dev",
+    "twig/twig": "~1.0"
   },
   "autoload": {
     "psr-4": {"PhpSitemaper\\": "src/"}
