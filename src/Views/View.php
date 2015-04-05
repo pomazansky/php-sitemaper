@@ -22,7 +22,6 @@ class View
     public function renderIndex(Application $app)
     {
         return $app['twig']->render('urlForm.twig', [
-            'template_path' => 'src/templates/',
             'title' => 'Sitemap Generator'
         ]);
     }
@@ -37,7 +36,6 @@ class View
     public function renderResult(Application $app, SitemapGenerator $sitemap)
     {
         return $app['twig']->render('result.twig', [
-            'template_path' => 'src/templates/',
             'title' => 'Sitemap Generator',
             'baseUrl' => $sitemap->getBaseUrl(),
             'linksCount' => $sitemap->getResourcesCount(),
@@ -56,7 +54,6 @@ class View
     {
         return $app['twig']->render('error.twig', [
             'title' => '404 Error: Page not found',
-            'template_path' => 'src/templates/',
             'msg' => '',
             'headling' => '404 Error: Page not found'
             ]);
@@ -73,7 +70,6 @@ class View
     {
         return $app['twig']->render('error.twig', [
             'title' => 'We are sorry, but an error happened',
-            'template_path' => 'src/templates/',
             'msg' => $msg ?: 'We are trying our best to fix it. Please, come back later.',
             'headling' => 'We are sorry, but an error happened'
         ]);
