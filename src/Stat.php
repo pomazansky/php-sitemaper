@@ -92,7 +92,7 @@ class Stat
      */
     private function saveToFile()
     {
-        file_put_contents('cache/stats/' . $this->sessionId, json_encode([
+        file_put_contents(__DIR__ . '/../var/cache/stats/' . $this->sessionId, json_encode([
             'started' => $this->started,
             'ended' => $this->ended,
             'levels' => $this->levels
