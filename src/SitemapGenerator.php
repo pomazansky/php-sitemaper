@@ -181,14 +181,15 @@ class SitemapGenerator
 
         $this->sitemapFiles[] = $this->genSitemapFilename();
         $this->exporter->setBaseUrl($this->getBaseUrl());
-        $this->exporter->setFilename('download/' . $this->sitemapFiles[0]);
+        $this->exporter->setFilename(__DIR__ . '/../download/' . $this->sitemapFiles[0]);
         $this->exporter->startDocument();
 
         foreach ($this->resources as $resource) {
             $this->exporter->attachUrl($resource);
 
             $writtenUrls++;
-            if ($writtenUrls === 50000 || filesize('download/' . $this->sitemapFiles[$currentFileIndex]) > 10484000) {
+            if ($writtenUrls === 50000
+                || filesize(__DIR__ . '/../download/' . $this->sitemapFiles[$currentFileIndex]) > 10484000) {
                 $this->exporter->save();
                 $currentFileIndex++;
                 $writtenUrls = 0;
@@ -204,7 +205,7 @@ class SitemapGenerator
 
         if ($this->config->gzip) {
             foreach ($this->sitemapFiles as &$filenameGZ) {
-                $this->gzFile('download/' . $filenameGZ);
+                $this->gzFile(__DIR__ . '/../download/' . $filenameGZ);
                 $filenameGZ .= '.gz';
             }
             unset($filenameGZ);
