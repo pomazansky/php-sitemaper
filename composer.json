@@ -10,13 +10,24 @@
     }
   ],
   "require": {
+    "php": ">5.4.0",
     "olamedia/nokogiri": "dev-master",
-    "symfony/console": "2.7.x-dev",
-    "guzzlehttp/guzzle": "5.0.*@dev",
-    "silex/silex": "1.2.x-dev",
+    "symfony/console": "~2.3",
+    "guzzlehttp/guzzle": "~5.0",
+    "silex/silex": "~1.0@dev",
     "twig/twig": "~1.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
   "autoload": {
-    "psr-4": {"PhpSitemaper\\": "src/"}
+    "psr-4": {
+      "PhpSitemaper\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PhpSitemaper\\Tests\\": "tests/"
+    }
   }
 }
