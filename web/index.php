@@ -7,7 +7,7 @@ use Silex\Application;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 
-require_once 'vendor/autoload.php';
+require_once __DIR__. '/../vendor/autoload.php';
 
 $app = new Application();
 
@@ -17,10 +17,9 @@ $app->mount('/', new SitemapController());
 
 $app->register(new SessionServiceProvider());
 $app->register(new TwigServiceProvider(), [
-    'twig.path' => __DIR__.'/src/templates',
+    'twig.path' => __DIR__.'/../templates',
     'twig.options' => [
-        'cache' => 'cache/twig',
-        'template_path' => 'src/templates/'
+        'cache' => __DIR__.'/../var/cache/twig',
     ]
 ]);
 
